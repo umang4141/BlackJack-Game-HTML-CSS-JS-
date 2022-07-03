@@ -1,0 +1,75 @@
+//"use strict";
+//const ps = require("prompt-sync");
+//const prompt = ps();
+let player = {
+    playerName: "per",
+    playerchips: 200
+};
+let cards = [];
+let sum = 0;
+let hasBlackJack = false;
+let isalive = false;
+let message = "";
+
+let messageEl = document.getElementById("message-el");
+let sumEl = document.getElementById("sum-el");
+let cardEl = document.getElementById("card-el");
+let playerEl = document.getElementById("player-el");
+playerEl.textContent = player.playerName + ": $" + player.playerchips;
+
+function getRandomcard() {
+
+    let random_number = Math.floor(Math.random() * 13) + 1;
+    if (random_number > 10) {
+        return 10;
+    } else if (random_number === 1) {
+        return 11;
+    } else {
+        return random_number;
+    }
+
+}
+
+function startgame() {
+    isalive = true;
+    let first_card = getRandomcard();
+    let second_card = getRandomcard();
+    cards = [first_card, second_card];
+    sum = first_card + second_card;
+    rendergame();
+}
+
+function rendergame() {
+    cardEl.textContent = "Cards: ";
+    for (let i = 0; i < cards.length; i++) {
+        cardEl.textContent += cards[i] + ' ';
+    }
+    sumEl.textContent = "Sum: " + sum;
+
+    if (sum < 21) {
+        message = ("Do you want to draw a new card?");
+
+
+    } else if (sum === 21) {
+        message = ("Wohoo! You've got BlackJack!");
+        hasBlackJack = true;
+
+    } else {
+        message = ("You'are out of the game!");
+        isalive = false;
+    }
+    messageEl.textContent = message;
+}
+
+function newCard() {
+
+    if (isalive === true && hasBlackJack === false) {
+        let card = getRandomcard();
+
+        sum += card;
+        cards.push(card);
+        rendergame();
+    }
+
+
+}
